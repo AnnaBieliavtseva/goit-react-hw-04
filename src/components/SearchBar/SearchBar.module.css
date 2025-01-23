@@ -1,5 +1,4 @@
 .header {
-  
   position: sticky;
   width: 100%;
   display: flex;
@@ -8,19 +7,14 @@
   top: 0;
   padding: 10px 16px;
   margin-bottom: 10px;
-  background-color: rgb(145, 64, 222);
- 
-
+  background-color: rgb(145, 64, 222, 0.5);
 }
 
 .form {
   display: inline-block;
-  position: relative; 
+  position: relative;
   margin: 0 auto;
   border: none;
-
-  
-
 }
 .input {
   display: inline-block;
@@ -28,7 +22,11 @@
   padding: 8px 8px 8px 35px;
   border-radius: 5px;
   border-color: transparent;
- 
+  outline-color: rgb(98, 12, 101);
+}
+
+.input:placeholder-shown {
+  outline-color: rgb(240, 88, 245);
 }
 
 .btn {
@@ -40,7 +38,6 @@
   background-color: transparent;
   cursor: pointer;
   padding: 0;
- 
 }
 
 .icon {
@@ -48,19 +45,22 @@
   height: 20px;
 }
 
+/* Styles for Tablet devices */
 @media screen and (min-width: 768px) {
-     .input {
-        width: 400px;
-        padding: 8px 8px 8px 40px;
-        
-    }
+  .input {
+    width: 400px;
+    padding: 8px 8px 8px 40px;
+  }
 
-    .btn {
-      left: 10px;
-    }
+  .btn {
+    left: 10px;
+  }
 }
 
 /* Styles for Desktop devices */
 @media screen and (min-width: 1440px) {
-   
+}
+
+.toast {
+  margin-top: 50px;
 }

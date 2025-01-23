@@ -1,0 +1,14 @@
+.text {
+  margin: 0 auto;
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  margin-top: 30px;
+  color: rgb(145, 64, 222);
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}

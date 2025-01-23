@@ -1,4 +1,5 @@
 import css from './SearchBar.module.css';
+import toast, { Toaster } from 'react-hot-toast';
 import { IoIosSearch } from 'react-icons/io';
 
 export default function SearchBar({ onSearch }) {
@@ -7,7 +8,11 @@ export default function SearchBar({ onSearch }) {
     evt.preventDefault();
     const inputValue = evt.target.elements.input;
     if (!inputValue.value.trim()) {
-      alert('Please enter search term!');
+      
+      toast.error('Please write something', {
+        duration: 1500,
+        position: 'top-center',
+        removeDelay: 1000,      });
       return;
     }
     console.log(inputValue.value);
@@ -31,6 +36,7 @@ export default function SearchBar({ onSearch }) {
           <IoIosSearch className={css.icon} />
         </button>
       </form>
+      <Toaster containerClassName={css.toast}></Toaster>
     </header>
   );
 }

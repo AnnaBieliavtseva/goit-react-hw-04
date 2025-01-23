@@ -1,46 +1,58 @@
 import { useState } from 'react';
-import axios from 'axios';
+import fetchApi from './fetchApi';
 import './App.css';
-import SearchBar from './SearchBar/SearchBar'
+import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
-
+import Loader from './Loader/Loader';
+import ErrorMesage from './ErrorMessage/ErrorMesage';
+import ImageModal from './ImageModal/ImageModal';
 
 function App() {
-  
-  const [photos, setPhotos] = useState([])
-  const API_KEY = 'dAH2WY0gbSSsUbDWlp-lRWPW_KmRNxBDuNYdJet8f8k'
- 
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleSearch = async inputValue => {
-     try {
-       setPhotos([]);
-       const data = await fetchArticlesWithTopic(inputValue);
-       setPhotos(data);
-     } catch (error) {
+    try {
+      setLoading(true);
+      setError(false)
+      setPhotos([]);
+      const data = await fetchApi(inputValue);
+      setPhotos(data);
+    } catch (error) {
       console.log(error);
-      
-     } 
-      
+      setError(true);
+    } finally {
+      setLoading(false);
     }
-  
-  const fetchArticlesWithTopic = async inputValue => {
-    const response = await axios.get(
-      `https://api.unsplash.com/search/photos?client_id=${API_KEY}&query=${inputValue}&per_page=20`
-    );
-    console.log(response.data.results);
-    
-    return response.data.results;
-  }
+  };
 
+    const handleImageClick = imageSrc => {
+      setSelectedImage(imageSrc); 
+      setIsOpen(true); 
+    };
   
+    const closeModal = () => {
+      setIsOpen(false); 
+      setSelectedImage(null); 
+    };
 
-    
   return (
     <>
       <SearchBar onSearch={handleSearch} />
       <div className="container">
-        {photos.length > 0 && <ImageGallery images={photos}/>}
-      
+        {loading && <Loader />}
+        {error && <ErrorMesage />}
+        {photos.length > 0 && (
+          <ImageGallery images={photos} onImageClick={handleImageClick} />
+        )}
+        <ImageModal
+          isOpen={modalIsOpen}
+          onClose={closeModal}
+          imageSrc={selectedImage}
+        />
       </div>
     </>
   );

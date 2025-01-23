@@ -1,18 +1,32 @@
-// import css from './ImageCard.module.css';
+import css from './ImageCard.module.css';
 
-const ImageCard = ({ description, alt_description, small, regular, likes }) => {
+const ImageCard = ({
+  userName,
+  alt_description,
+  small,
+  regular,
+  likes,
+  onImageClick,
+}) => {
+  const handleClick = e => {
+    e.preventDefault();
+    onImageClick(regular);
+  };
   return (
     <div>
-      <a href={regular}>
-        <img src={small} alt={alt_description}/>
+      <a href={regular} onClick={handleClick}>
+        <img src={small} alt={alt_description} className={css.img} />
       </a>
-
-      <p>
-        Likes: <b>{likes}</b>
-      </p>
-      <p>
-        Descr: <b>{description  || "Photo"}</b>
-      </p>
+      <div className={css.thumb}>
+        <p className={css.text}>
+          Author:
+          <b>{userName}</b>
+        </p>
+        <p className={css.text}>
+          Likes:
+          <b>{likes}</b>
+        </p>
+      </div>
     </div>
   );
 };

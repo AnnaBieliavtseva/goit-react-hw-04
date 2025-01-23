@@ -1,6 +1,30 @@
-.contactList {
-    margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+.gallery {
+  display: grid;
+  gap: 10px;
+  justify-content: center;
+}
+
+.card {
+  border: 1px solid rgb(255, 195, 250, 0.5);
+  border-radius: 5%;
+}
+
+.card:hover,
+.card:focus {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+
+/* Styles for Tablet devices */
+@media screen and (min-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(3, 33.3%);
+  }
+}
+
+/* Styles for Desktop devices */
+@media screen and (min-width: 1440px) {
+  .gallery {
+    grid-template-columns: repeat(4, 25%);
+  }
 }
