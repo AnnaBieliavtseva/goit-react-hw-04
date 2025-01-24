@@ -30,11 +30,14 @@ function App() {
       setPhotos(data);
       if (!data.length) {
         setLoading(false);
-         toast.error('Sorry, there are no images matching your search query. Please try another query!', {
-           duration: 1500,
-           position: 'top-center',
-           removeDelay: 1000,
-         });
+        toast.error(
+          'Sorry, there are no images matching your search query. Please try another query!',
+          {
+            duration: 1500,
+            position: 'top-center',
+            removeDelay: 1000,
+          }
+        );
       }
       if (!modalIsOpen) {
         animateScroll.scrollToBottom({
@@ -99,7 +102,6 @@ function App() {
           <LoadMoreBtn onLoadMore={handleLoadMore} />
         )}
         {loading && <Loader />}
-        {/* <Toaster></Toaster> */}
       </div>
     </>
   );
