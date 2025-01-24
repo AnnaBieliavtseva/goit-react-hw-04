@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { animateScroll } from 'react-scroll';
+import toast from 'react-hot-toast';
 import fetchApi from './fetchApi';
 import './App.css';
 import SearchBar from './SearchBar/SearchBar';
@@ -27,6 +28,14 @@ function App() {
       setCurrentPage(1);
       const data = await fetchApi(inputValue, 1);
       setPhotos(data);
+      if (!data.length) {
+        setLoading(false);
+         toast.error('Sorry, there are no images matching your search query. Please try another query!', {
+           duration: 1500,
+           position: 'top-center',
+           removeDelay: 1000,
+         });
+      }
       if (!modalIsOpen) {
         animateScroll.scrollToBottom({
           duration: 600,
@@ -90,6 +99,7 @@ function App() {
           <LoadMoreBtn onLoadMore={handleLoadMore} />
         )}
         {loading && <Loader />}
+        {/* <Toaster></Toaster> */}
       </div>
     </>
   );

@@ -14,7 +14,7 @@ export default function SearchBar({ onSearch }) {
       });
       return;
     }
-    console.log(inputValue.value);
+
     onSearch(inputValue.value);
     evt.target.reset();
   };
