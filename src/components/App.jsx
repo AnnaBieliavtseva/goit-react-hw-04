@@ -18,8 +18,6 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
 
-
-
   const handleSearch = async inputValue => {
     try {
       setLoading(true);
@@ -79,7 +77,6 @@ function App() {
     <>
       <SearchBar onSearch={handleSearch} />
       <div className="container">
-        {loading && <Loader />}
         {error && <ErrorMesage />}
         {photos.length > 0 && (
           <ImageGallery images={photos} onImageClick={handleImageClick} />
@@ -92,6 +89,7 @@ function App() {
         {photos.length > 0 && !loading && (
           <LoadMoreBtn onLoadMore={handleLoadMore} />
         )}
+        {loading && <Loader />}
       </div>
     </>
   );

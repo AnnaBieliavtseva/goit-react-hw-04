@@ -1,4 +1,4 @@
-import css from './Loader.module.css'
+import css from './Loader.module.css';
 import { BallTriangle } from 'react-loader-spinner';
 
 export default function Loader() {
