@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { animateScroll } from 'react-scroll';
 import fetchApi from './fetchApi';
 import './App.css';
 import SearchBar from './SearchBar/SearchBar';
@@ -6,6 +7,7 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import ErrorMesage from './ErrorMessage/ErrorMesage';
 import ImageModal from './ImageModal/ImageModal';
+import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
 
 function App() {
   const [photos, setPhotos] = useState([]);
@@ -13,14 +15,26 @@ function App() {
   const [error, setError] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+
+
 
   const handleSearch = async inputValue => {
     try {
       setLoading(true);
-      setError(false)
+      setError(false);
       setPhotos([]);
-      const data = await fetchApi(inputValue);
+      setSearchQuery(inputValue);
+      setCurrentPage(1);
+      const data = await fetchApi(inputValue, 1);
       setPhotos(data);
+      if (!modalIsOpen) {
+        animateScroll.scrollToBottom({
+          duration: 600,
+          smooth: true,
+        });
+      }
     } catch (error) {
       console.log(error);
       setError(true);
@@ -29,15 +43,37 @@ function App() {
     }
   };
 
-    const handleImageClick = imageSrc => {
-      setSelectedImage(imageSrc); 
-      setIsOpen(true); 
-    };
-  
-    const closeModal = () => {
-      setIsOpen(false); 
-      setSelectedImage(null); 
-    };
+  const handleImageClick = imageSrc => {
+    setSelectedImage(imageSrc);
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setSelectedImage(null);
+  };
+
+  const handleLoadMore = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+      const nextPage = currentPage + 1;
+      const data = await fetchApi(searchQuery, nextPage);
+      setPhotos(prevPhotos => [...prevPhotos, ...data]);
+      setCurrentPage(nextPage);
+      if (!modalIsOpen) {
+        animateScroll.scrollToBottom({
+          duration: 600,
+          smooth: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -53,6 +89,9 @@ function App() {
           onClose={closeModal}
           imageSrc={selectedImage}
         />
+        {photos.length > 0 && !loading && (
+          <LoadMoreBtn onLoadMore={handleLoadMore} />
+        )}
       </div>
     </>
   );
