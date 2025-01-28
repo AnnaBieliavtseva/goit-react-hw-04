@@ -18,6 +18,7 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  const [totalPages, setTotalPages] = useState(0);
 
   const handleSearch = async inputValue => {
     try {
@@ -27,8 +28,9 @@ function App() {
       setSearchQuery(inputValue);
       setCurrentPage(1);
       const data = await fetchApi(inputValue, 1);
-      setPhotos(data);
-      if (!data.length) {
+      setPhotos(data.results);
+      setTotalPages(data.total_pages);
+      if (!data.results.length) {
         setLoading(false);
         toast.error(
           'Sorry, there are no images matching your search query. Please try another query!',
@@ -36,6 +38,18 @@ function App() {
             duration: 1500,
             position: 'top-center',
             removeDelay: 1000,
+          }
+        );
+        return;
+      }
+      if (data.results.length < 20 || data.results.length > 1) {
+        setLoading(false);
+        toast.error(
+          'There are not enough images to load more. Try a different query!',
+          {
+            duration: 2500,
+            position: 'bottom-center',
+            removeDelay: 500,
           }
         );
       }
@@ -69,8 +83,23 @@ function App() {
       setError(false);
       const nextPage = currentPage + 1;
       const data = await fetchApi(searchQuery, nextPage);
-      setPhotos(prevPhotos => [...prevPhotos, ...data]);
+      setPhotos(prevPhotos => [...prevPhotos, ...data.results]);
       setCurrentPage(nextPage);
+      console.log(data.total_pages);
+      console.log(currentPage);
+      
+      
+      if (totalPages < currentPage) {
+        setLoading(false);
+        toast.error(
+          "We're sorry, but you've reached the end of search results.",
+          {
+            duration: 2500,
+            position: 'bottom-center',
+            removeDelay: 1000,
+          }
+        );
+      }
       if (!modalIsOpen) {
         animateScroll.scrollToBottom({
           duration: 600,
@@ -98,7 +127,7 @@ function App() {
           onClose={closeModal}
           imageSrc={selectedImage}
         />
-        {photos.length > 0 && !loading && (
+        {photos.length > 0 && !loading && currentPage < totalPages && (
           <LoadMoreBtn onLoadMore={handleLoadMore} />
         )}
         {loading && <Loader />}

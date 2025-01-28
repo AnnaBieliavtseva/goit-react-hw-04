@@ -6,7 +6,7 @@ export default function ImageGallery({ images, onImageClick }) {
     <ul className={css.gallery}>
       {images.map(({ id, user, urls, likes, alt_description }) => {
         return (
-          <li key={id} className={css.card}>
+          <li key={id + Math.random(0.2)} className={css.card}>
             <ImageCard
               userName={user.name}
               regular={urls.regular}

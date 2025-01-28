@@ -8,8 +8,9 @@ const fetchApi = async (inputValue, currentPage) => {
   const response = await axios.get(
     `/search/photos?&query=${inputValue}&per_page=20&page=${currentPage}`
   );
+console.log(response.data);
 
-  return response.data.results;
+  return response.data;
 };
 
 export default fetchApi;
